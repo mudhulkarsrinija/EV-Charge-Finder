@@ -1,0 +1,193 @@
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">⚡</div>
+    <span>EV<span class="brand-green">Charge</span></span>
+  </div>
+
+  <div class="header-status">
+    <span class="status-dot"></span>
+    Station Explorer
+  </div>
+
+  <span class="header-label">CLEAN ENERGY</span>
+</header>
+
+<main class="container">
+
+  <div class="debug-panel">
+    Debug: Stations = {{ stations.length }},
+    Filtered = {{ filteredStations.length }},
+    Loading = {{ loading }}
+  </div>
+
+  <section class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">⚡ SMARTER ELECTRIC DRIVING</p>
+      <h1>Find your next<br><span>charge.</span></h1>
+      <p class="hero-description">
+        Explore charging stations, compare charging speeds,
+        and discover your next charging stop.
+      </p>
+    </div>
+
+    <aside class="stats-card">
+      <div class="stat-item">
+        <span class="stat-icon">🔌</span>
+        <strong>{{ stations.length }}</strong>
+        <span>Sample stations</span>
+      </div>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-item">
+        <strong class="green-number">{{ availableCount }}</strong>
+        <span>Marked available</span>
+      </div>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-item">
+        <strong>{{ favoriteCount }}</strong>
+        <span>Saved favorites</span>
+      </div>
+    </aside>
+  </section>
+
+  <section class="search-section">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (input)="searchStations()"
+        placeholder="Search station, location, or connector..."
+        aria-label="Search charging stations"
+      >
+    </div>
+
+    <p class="result-count">
+      Showing <strong>{{ filteredStations.length }}</strong> stations
+    </p>
+  </section>
+
+  <section class="section-heading">
+    <div>
+      <h2>Explore stations</h2>
+      <p>Charging options for your next journey</p>
+    </div>
+    <span class="demo-badge">DEMO DATA</span>
+  </section>
+
+  <section class="message-card" *ngIf="loading">
+    <span class="spinner"></span>
+    <span>Loading charging stations...</span>
+  </section>
+
+  <section
+    class="message-card error-card"
+    *ngIf="!loading && errorMessage"
+  >
+    <h3>Unable to load stations</h3>
+    <p>{{ errorMessage }}</p>
+    <button class="primary-button" (click)="loadStations()">
+      Try again
+    </button>
+  </section>
+
+  <section
+    class="message-card"
+    *ngIf="!loading && !errorMessage && filteredStations.length === 0"
+  >
+    No charging stations match your search.
+  </section>
+
+  <section
+    class="station-grid"
+    *ngIf="!loading && !errorMessage && filteredStations.length > 0"
+  >
+    <article
+      class="station-card"
+      *ngFor="let station of filteredStations"
+      [class.selected-card]="selectedStation?.id === station.id"
+    >
+      <div class="station-card-top">
+        <div class="station-icon">⚡</div>
+
+        <span
+          class="availability"
+          [class.unavailable]="!station.available"
+        >
+          {{ station.available ? 'Available' : 'Unavailable' }}
+        </span>
+      </div>
+
+      <h3>{{ station.name }}</h3>
+
+      <p class="station-location">
+        📍 {{ station.location }}
+      </p>
+
+      <div class="station-details">
+        <div>
+          <span class="detail-label">CONNECTOR</span>
+          <strong>{{ station.chargerType }}</strong>
+        </div>
+
+        <div>
+          <span class="detail-label">CHARGING SPEED</span>
+          <strong>{{ station.chargingSpeed }}</strong>
+        </div>
+
+        <div>
+          <span class="detail-label">PRICE / UNIT</span>
+          <strong>₹{{ station.pricePerUnit }}</strong>
+        </div>
+      </div>
+
+      <div class="station-actions">
+        <button
+          class="primary-button"
+          (click)="selectStation(station)"
+        >
+          View on map
+        </button>
+
+        <button
+          class="favorite-button"
+          [class.is-favorite]="isFavorite(station)"
+          (click)="toggleFavorite(station)"
+        >
+          {{ isFavorite(station) ? '♥ Saved' : '♡ Save' }}
+        </button>
+      </div>
+    </article>
+  </section>
+
+  <section class="map-section">
+    <div class="section-heading">
+      <div>
+        <h2>Charging station map</h2>
+        <p>Select a marker to explore a station.</p>
+      </div>
+    </div>
+
+    <div id="map" aria-label="Charging station map"></div>
+
+    <p class="map-note">
+      Map © OpenStreetMap contributors.
+      Station locations are demonstration data.
+    </p>
+  </section>
+
+  <footer class="footer">
+    <div class="brand footer-brand">
+      <div class="brand-icon">⚡</div>
+      <span>EV<span class="brand-green">Charge</span></span>
+    </div>
+
+    <p>Making every electric journey easier.</p>
+    <p>Built with Angular &amp; Node.js</p>
+  </footer>
+
+</main>

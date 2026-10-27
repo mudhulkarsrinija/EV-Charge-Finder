@@ -1,0 +1,43 @@
+# Dependencies
+
+node_modules/
+
+# Angular generated files
+
+frontend/dist/
+frontend/.angular/
+
+# Environment variables and secrets
+
+.env
+.env.*
+!.env.example
+
+# Logs
+
+*.log
+npm-debug.log*
+
+# Operating system files
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+
+.vscode/
+.idea/
+node_modules/
+**/node_modules/
+
+frontend/dist/
+frontend/.angular/
+
+.env
+.env.*
+!.env.example
+
+*.log
+.DS_Store
+Thumbs.db
